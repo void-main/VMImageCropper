@@ -1,0 +1,482 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		DF31B782197B983600ECAEB1 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DF31B781197B983600ECAEB1 /* Cocoa.framework */; };
+		DF31B78C197B983600ECAEB1 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = DF31B78A197B983600ECAEB1 /* InfoPlist.strings */; };
+		DF31B78E197B983600ECAEB1 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DF31B78D197B983600ECAEB1 /* main.m */; };
+		DF31B792197B983600ECAEB1 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = DF31B790197B983600ECAEB1 /* Credits.rtf */; };
+		DF31B795197B983600ECAEB1 /* VMAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DF31B794197B983600ECAEB1 /* VMAppDelegate.m */; };
+		DF31B798197B983600ECAEB1 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = DF31B796197B983600ECAEB1 /* MainMenu.xib */; };
+		DF31B79A197B983600ECAEB1 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DF31B799197B983600ECAEB1 /* Images.xcassets */; };
+		DF31B7A1197B983700ECAEB1 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DF31B7A0197B983700ECAEB1 /* XCTest.framework */; };
+		DF31B7A2197B983700ECAEB1 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DF31B781197B983600ECAEB1 /* Cocoa.framework */; };
+		DF31B7AA197B983700ECAEB1 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = DF31B7A8197B983700ECAEB1 /* InfoPlist.strings */; };
+		DF31B7AC197B983700ECAEB1 /* VMImageCropperExampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = DF31B7AB197B983700ECAEB1 /* VMImageCropperExampleTests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		DF31B7A3197B983700ECAEB1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DF31B776197B983600ECAEB1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DF31B77D197B983600ECAEB1;
+			remoteInfo = VMImageCropperExample;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		DF31B77E197B983600ECAEB1 /* VMImageCropperExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VMImageCropperExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DF31B781197B983600ECAEB1 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		DF31B784197B983600ECAEB1 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		DF31B785197B983600ECAEB1 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		DF31B786197B983600ECAEB1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		DF31B789197B983600ECAEB1 /* VMImageCropperExample-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "VMImageCropperExample-Info.plist"; sourceTree = "<group>"; };
+		DF31B78B197B983600ECAEB1 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		DF31B78D197B983600ECAEB1 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		DF31B78F197B983600ECAEB1 /* VMImageCropperExample-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "VMImageCropperExample-Prefix.pch"; sourceTree = "<group>"; };
+		DF31B791197B983600ECAEB1 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
+		DF31B793197B983600ECAEB1 /* VMAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VMAppDelegate.h; sourceTree = "<group>"; };
+		DF31B794197B983600ECAEB1 /* VMAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VMAppDelegate.m; sourceTree = "<group>"; };
+		DF31B797197B983600ECAEB1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		DF31B799197B983600ECAEB1 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		DF31B79F197B983700ECAEB1 /* VMImageCropperExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VMImageCropperExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		DF31B7A0197B983700ECAEB1 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		DF31B7A7197B983700ECAEB1 /* VMImageCropperExampleTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "VMImageCropperExampleTests-Info.plist"; sourceTree = "<group>"; };
+		DF31B7A9197B983700ECAEB1 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		DF31B7AB197B983700ECAEB1 /* VMImageCropperExampleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VMImageCropperExampleTests.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		DF31B77B197B983600ECAEB1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DF31B782197B983600ECAEB1 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DF31B79C197B983700ECAEB1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DF31B7A2197B983700ECAEB1 /* Cocoa.framework in Frameworks */,
+				DF31B7A1197B983700ECAEB1 /* XCTest.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		DF31B775197B983600ECAEB1 = {
+			isa = PBXGroup;
+			children = (
+				DF31B787197B983600ECAEB1 /* VMImageCropperExample */,
+				DF31B7A5197B983700ECAEB1 /* VMImageCropperExampleTests */,
+				DF31B780197B983600ECAEB1 /* Frameworks */,
+				DF31B77F197B983600ECAEB1 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		DF31B77F197B983600ECAEB1 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				DF31B77E197B983600ECAEB1 /* VMImageCropperExample.app */,
+				DF31B79F197B983700ECAEB1 /* VMImageCropperExampleTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		DF31B780197B983600ECAEB1 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				DF31B781197B983600ECAEB1 /* Cocoa.framework */,
+				DF31B7A0197B983700ECAEB1 /* XCTest.framework */,
+				DF31B783197B983600ECAEB1 /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		DF31B783197B983600ECAEB1 /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				DF31B784197B983600ECAEB1 /* AppKit.framework */,
+				DF31B785197B983600ECAEB1 /* CoreData.framework */,
+				DF31B786197B983600ECAEB1 /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		DF31B787197B983600ECAEB1 /* VMImageCropperExample */ = {
+			isa = PBXGroup;
+			children = (
+				DF31B793197B983600ECAEB1 /* VMAppDelegate.h */,
+				DF31B794197B983600ECAEB1 /* VMAppDelegate.m */,
+				DF31B796197B983600ECAEB1 /* MainMenu.xib */,
+				DF31B799197B983600ECAEB1 /* Images.xcassets */,
+				DF31B788197B983600ECAEB1 /* Supporting Files */,
+			);
+			path = VMImageCropperExample;
+			sourceTree = "<group>";
+		};
+		DF31B788197B983600ECAEB1 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				DF31B789197B983600ECAEB1 /* VMImageCropperExample-Info.plist */,
+				DF31B78A197B983600ECAEB1 /* InfoPlist.strings */,
+				DF31B78D197B983600ECAEB1 /* main.m */,
+				DF31B78F197B983600ECAEB1 /* VMImageCropperExample-Prefix.pch */,
+				DF31B790197B983600ECAEB1 /* Credits.rtf */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		DF31B7A5197B983700ECAEB1 /* VMImageCropperExampleTests */ = {
+			isa = PBXGroup;
+			children = (
+				DF31B7AB197B983700ECAEB1 /* VMImageCropperExampleTests.m */,
+				DF31B7A6197B983700ECAEB1 /* Supporting Files */,
+			);
+			path = VMImageCropperExampleTests;
+			sourceTree = "<group>";
+		};
+		DF31B7A6197B983700ECAEB1 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				DF31B7A7197B983700ECAEB1 /* VMImageCropperExampleTests-Info.plist */,
+				DF31B7A8197B983700ECAEB1 /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		DF31B77D197B983600ECAEB1 /* VMImageCropperExample */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DF31B7AF197B983700ECAEB1 /* Build configuration list for PBXNativeTarget "VMImageCropperExample" */;
+			buildPhases = (
+				DF31B77A197B983600ECAEB1 /* Sources */,
+				DF31B77B197B983600ECAEB1 /* Frameworks */,
+				DF31B77C197B983600ECAEB1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = VMImageCropperExample;
+			productName = VMImageCropperExample;
+			productReference = DF31B77E197B983600ECAEB1 /* VMImageCropperExample.app */;
+			productType = "com.apple.product-type.application";
+		};
+		DF31B79E197B983700ECAEB1 /* VMImageCropperExampleTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DF31B7B2197B983700ECAEB1 /* Build configuration list for PBXNativeTarget "VMImageCropperExampleTests" */;
+			buildPhases = (
+				DF31B79B197B983700ECAEB1 /* Sources */,
+				DF31B79C197B983700ECAEB1 /* Frameworks */,
+				DF31B79D197B983700ECAEB1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				DF31B7A4197B983700ECAEB1 /* PBXTargetDependency */,
+			);
+			name = VMImageCropperExampleTests;
+			productName = VMImageCropperExampleTests;
+			productReference = DF31B79F197B983700ECAEB1 /* VMImageCropperExampleTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		DF31B776197B983600ECAEB1 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				CLASSPREFIX = VM;
+				LastUpgradeCheck = 0510;
+				ORGANIZATIONNAME = "Void Main";
+				TargetAttributes = {
+					DF31B79E197B983700ECAEB1 = {
+						TestTargetID = DF31B77D197B983600ECAEB1;
+					};
+				};
+			};
+			buildConfigurationList = DF31B779197B983600ECAEB1 /* Build configuration list for PBXProject "VMImageCropperExample" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = DF31B775197B983600ECAEB1;
+			productRefGroup = DF31B77F197B983600ECAEB1 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				DF31B77D197B983600ECAEB1 /* VMImageCropperExample */,
+				DF31B79E197B983700ECAEB1 /* VMImageCropperExampleTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		DF31B77C197B983600ECAEB1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DF31B78C197B983600ECAEB1 /* InfoPlist.strings in Resources */,
+				DF31B79A197B983600ECAEB1 /* Images.xcassets in Resources */,
+				DF31B792197B983600ECAEB1 /* Credits.rtf in Resources */,
+				DF31B798197B983600ECAEB1 /* MainMenu.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DF31B79D197B983700ECAEB1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DF31B7AA197B983700ECAEB1 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		DF31B77A197B983600ECAEB1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DF31B78E197B983600ECAEB1 /* main.m in Sources */,
+				DF31B795197B983600ECAEB1 /* VMAppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DF31B79B197B983700ECAEB1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DF31B7AC197B983700ECAEB1 /* VMImageCropperExampleTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		DF31B7A4197B983700ECAEB1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DF31B77D197B983600ECAEB1 /* VMImageCropperExample */;
+			targetProxy = DF31B7A3197B983700ECAEB1 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		DF31B78A197B983600ECAEB1 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DF31B78B197B983600ECAEB1 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		DF31B790197B983600ECAEB1 /* Credits.rtf */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DF31B791197B983600ECAEB1 /* en */,
+			);
+			name = Credits.rtf;
+			sourceTree = "<group>";
+		};
+		DF31B796197B983600ECAEB1 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DF31B797197B983600ECAEB1 /* Base */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+		DF31B7A8197B983700ECAEB1 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DF31B7A9197B983700ECAEB1 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		DF31B7AD197B983700ECAEB1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		DF31B7AE197B983700ECAEB1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		DF31B7B0197B983700ECAEB1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "VMImageCropperExample/VMImageCropperExample-Prefix.pch";
+				INFOPLIST_FILE = "VMImageCropperExample/VMImageCropperExample-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		DF31B7B1197B983700ECAEB1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "VMImageCropperExample/VMImageCropperExample-Prefix.pch";
+				INFOPLIST_FILE = "VMImageCropperExample/VMImageCropperExample-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		DF31B7B3197B983700ECAEB1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/VMImageCropperExample.app/Contents/MacOS/VMImageCropperExample";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "VMImageCropperExample/VMImageCropperExample-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "VMImageCropperExampleTests/VMImageCropperExampleTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Debug;
+		};
+		DF31B7B4197B983700ECAEB1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/VMImageCropperExample.app/Contents/MacOS/VMImageCropperExample";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "VMImageCropperExample/VMImageCropperExample-Prefix.pch";
+				INFOPLIST_FILE = "VMImageCropperExampleTests/VMImageCropperExampleTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		DF31B779197B983600ECAEB1 /* Build configuration list for PBXProject "VMImageCropperExample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DF31B7AD197B983700ECAEB1 /* Debug */,
+				DF31B7AE197B983700ECAEB1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DF31B7AF197B983700ECAEB1 /* Build configuration list for PBXNativeTarget "VMImageCropperExample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DF31B7B0197B983700ECAEB1 /* Debug */,
+				DF31B7B1197B983700ECAEB1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		DF31B7B2197B983700ECAEB1 /* Build configuration list for PBXNativeTarget "VMImageCropperExampleTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DF31B7B3197B983700ECAEB1 /* Debug */,
+				DF31B7B4197B983700ECAEB1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = DF31B776197B983600ECAEB1 /* Project object */;
+}

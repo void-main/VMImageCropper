@@ -11,6 +11,14 @@
 #define kBorderWidth  8
 #define kCornerLength 20
 
+typedef enum : NSUInteger {
+    None,
+    Normal,
+    Dragging,
+} ViewStatus;
+
 @interface VMCropCoreView : NSView
+
+@property ViewStatus viewStatus;
 
 @end

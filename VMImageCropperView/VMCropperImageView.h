@@ -43,4 +43,6 @@ typedef enum : NSUInteger {
     VMCropCoreView *_cropCoreView;
 }
 
+- (NSImage *)croppedImage;
+
 @end

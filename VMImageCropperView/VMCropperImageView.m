@@ -10,6 +10,7 @@
 #import "VMCropCoreView.h"
 
 #define kSideWidth 4
+#define kCropWindowMinSize 8
 
 @interface VMCropperImageView (ImageSize)
 
@@ -31,6 +32,7 @@
 {
     if (self = [super initWithCoder:aDecoder]) {
         _cropCoreView = [[VMCropCoreView alloc] initWithFrame:NSMakeRect(-10000, -10000, 0, 0)];
+        _cropCoreView.viewStatus = Normal;
         [self addSubview:_cropCoreView];
     }
 
@@ -44,6 +46,17 @@
     _actualRect = [self imageRect];
     _cropCoreView.frame = _actualRect;
     [_cropCoreView setNeedsDisplay:YES];
+}
+
+- (NSImage *)croppedImage
+{
+    NSImage *cropped = [[NSImage alloc] initWithSize:_cropCoreView.frame.size];
+    [cropped lockFocus];
+
+    // Draw the cropped region
+
+    [cropped unlockFocus];
+    return cropped;
 }
 
 #pragma mark -
@@ -149,6 +162,10 @@
 {
     _startPoint = [theEvent locationInWindow];
     _startFrame = _cropCoreView.frame;
+
+    if (NSPointInRect(_startPoint, _cropCoreView.frame)) {
+        _cropCoreView.viewStatus = Dragging;
+    }
 }
 
 - (void)mouseDragged:(NSEvent *)theEvent
@@ -166,39 +183,204 @@
     switch (_dragType) {
         case New: {
             NSPoint newOrigin = [self convertPoint:_startPoint fromView:nil];
-            x = newOrigin.x;
-            y = newOrigin.y;
-            width = deltaX;
-            height = deltaY;
+
+            if (deltaX >= 0) {
+                if (deltaY >= 0) {
+                    x = newOrigin.x;
+                    y = newOrigin.y;
+                    width = fmaxf(deltaX, kCropWindowMinSize);
+                    height = fmaxf(deltaY, kCropWindowMinSize);
+
+                    if (x + width > _actualRect.origin.x + _actualRect.size.width) {
+                        width = _actualRect.origin.x + _actualRect.size.width - x;
+                    }
+                    if (y + height > _actualRect.origin.y + _actualRect.size.height) {
+                        height = _actualRect.origin.y + _actualRect.size.height - y;
+                    }
+                } else {
+                    width = fmaxf(deltaX, kCropWindowMinSize);
+                    height = fmaxf(-deltaY, kCropWindowMinSize);
+                    x = newOrigin.x;
+                    y = newOrigin.y - height;
+
+                    if (x + width > _actualRect.origin.x + _actualRect.size.width) {
+                        width = _actualRect.origin.x + _actualRect.size.width - x;
+                    }
+                    if (y < _actualRect.origin.y) {
+                        height += (y - _actualRect.origin.y);
+                        y = _actualRect.origin.y;
+                    }
+                }
+            } else {
+                if (deltaY >= 0) {
+                    width = fmaxf(-deltaX, kCropWindowMinSize);
+                    height = fmaxf(deltaY, kCropWindowMinSize);
+                    x = newOrigin.x - width;
+                    y = newOrigin.y;
+
+                    if (x < _actualRect.origin.x) {
+                        width += (x - _actualRect.origin.x);
+                        x = _actualRect.origin.x;
+                    }
+                    if (y + height > _actualRect.origin.y + _actualRect.size.height) {
+                        height = _actualRect.origin.y + _actualRect.size.height - y;
+                    }
+                } else {
+                    width = fmaxf(-deltaX, kCropWindowMinSize);
+                    height = fmaxf(-deltaY, kCropWindowMinSize);
+                    x = newOrigin.x - width;
+                    y = newOrigin.y - height;
+
+                    if (x < _actualRect.origin.x) {
+                        width += (x - _actualRect.origin.x);
+                        x = _actualRect.origin.x;
+                    }
+                    if (y < _actualRect.origin.y) {
+                        height += (y - _actualRect.origin.y);
+                        y = _actualRect.origin.y;
+                    }
+                }
+            }
             break;
         }
         case Move: {
             x += deltaX;
             y += deltaY;
+
+            if (x < _actualRect.origin.x) {
+                x = _actualRect.origin.x;
+            }
+            if (x + width > _actualRect.origin.x + _actualRect.size.width) {
+                x = _actualRect.origin.x + _actualRect.size.width - width;
+            }
+            if (y < _actualRect.origin.y) {
+                y = _actualRect.origin.y;
+            }
+            if (y + height > _actualRect.origin.y + _actualRect.size.height) {
+                y = _actualRect.origin.y + _actualRect.size.height - height;
+            }
             break;
         }
         case Left: {
             x += deltaX;
             width -= deltaX;
+
+            if (width > 0) {
+                if (x < _actualRect.origin.x) {
+                    width += (x - _actualRect.origin.x);
+                    x = _actualRect.origin.x;
+                }
+            } else {
+                x += width;
+                width = -width;
+                if (x + width > _actualRect.origin.x + _actualRect.size.width) {
+                    width = _actualRect.origin.x + _actualRect.size.width - x;
+                }
+            }
             break;
         }
         case Right: {
             width += deltaX;
+
+            if (width > 0) {
+                if (x + width > _actualRect.origin.x + _actualRect.size.width) {
+                    width = _actualRect.origin.x + _actualRect.size.width - x;
+                }
+            } else {
+                x += width;
+                width = -width;
+                if (x < _actualRect.origin.x) {
+                    width += (x - _actualRect.origin.x);
+                    x = _actualRect.origin.x;
+                }
+            }
             break;
         }
         case Bottom: {
             y += deltaY;
             height -= deltaY;
+
+            if (height > 0) {
+                if (y < _actualRect.origin.y) {
+                    height += (y - _actualRect.origin.y);
+                    y = _actualRect.origin.y;
+                }
+            } else {
+                y += height;
+                height = -height;
+                if (y + height > _actualRect.origin.y + _actualRect.size.height) {
+                    height = _actualRect.origin.y + _actualRect.size.height - y;
+                }
+            }
             break;
         }
         case Top: {
             height += deltaY;
+
+            if (height > 0) {
+                if (y + height > _actualRect.origin.y + _actualRect.size.height) {
+                    height = _actualRect.origin.y + _actualRect.size.height - y;
+                }
+            } else {
+                y += height;
+                height = -height;
+                if (y < _actualRect.origin.y) {
+                    height += (y - _actualRect.origin.y);
+                    y = _actualRect.origin.y;
+                }
+            }
             break;
         }
         case CornerTL: {
             x += deltaX;
             width -= deltaX;
-            height -= deltaX;
+            height += deltaY;
+
+            if (width >= 0 && height >= 0) {
+                if (x < _actualRect.origin.x) {
+                    width += (x - _actualRect.origin.x);
+                    x = _actualRect.origin.x;
+                }
+                if (y + height > _actualRect.origin.y + _actualRect.size.height) {
+                    height = _actualRect.origin.y + _actualRect.size.height - y;
+                }
+            } else if (width >= 0 && height < 0) {
+                y += height;
+                height = -height;
+
+                if (x < _actualRect.origin.x) {
+                    width += (x - _actualRect.origin.x);
+                    x = _actualRect.origin.x;
+                }
+                if (y < _actualRect.origin.y) {
+                    height += (y - _actualRect.origin.y);
+                    y = _actualRect.origin.y;
+                }
+            } else if (width < 0 && height >= 0) {
+                x += width;
+                width = -width;
+
+                if (x + width > _actualRect.origin.x + _actualRect.size.width) {
+                    width = _actualRect.origin.x + _actualRect.size.width - x;
+                }
+                if (y + height > _actualRect.origin.y + _actualRect.size.height) {
+                    height = _actualRect.origin.y + _actualRect.size.height - y;
+                }
+            } else {
+                x += width;
+                y += height;
+                width = -width;
+                height = -height;
+
+                if (x + width > _actualRect.origin.x + _actualRect.size.width) {
+                    width = _actualRect.origin.x + _actualRect.size.width - x;
+                }
+                if (y < _actualRect.origin.y) {
+                    height += (y - _actualRect.origin.y);
+                    y = _actualRect.origin.y;
+                }
+            }
+
             break;
         }
         case CornerBL: {
@@ -206,17 +388,155 @@
             y += deltaY;
             width -= deltaX;
             height -= deltaY;
+
+            if (width >= 0 && height >= 0) {
+                if (x < _actualRect.origin.x) {
+                    width += (x - _actualRect.origin.x);
+                    x = _actualRect.origin.x;
+                }
+                if (y < _actualRect.origin.y) {
+                    height += (y - _actualRect.origin.y);
+                    y = _actualRect.origin.y;
+                }
+            } else if (width >= 0 && height < 0) {
+                y += height;
+                height = -height;
+
+                if (x < _actualRect.origin.x) {
+                    width += (x - _actualRect.origin.x);
+                    x = _actualRect.origin.x;
+                }
+                if (y + height > _actualRect.origin.y + _actualRect.size.height) {
+                    height = _actualRect.origin.y + _actualRect.size.height - y;
+                }
+            } else if (width < 0 && height >= 0) {
+                x += width;
+                width = -width;
+
+                if (x + width > _actualRect.origin.x + _actualRect.size.width) {
+                    width = _actualRect.origin.x + _actualRect.size.width - x;
+                }
+                if (y < _actualRect.origin.y) {
+                    height += (y - _actualRect.origin.y);
+                    y = _actualRect.origin.y;
+                }
+            } else {
+                x += width;
+                y += height;
+                width = -width;
+                height = -height;
+
+                if (x + width > _actualRect.origin.x + _actualRect.size.width) {
+                    width = _actualRect.origin.x + _actualRect.size.width - x;
+                }
+                if (y + height > _actualRect.origin.y + _actualRect.size.height) {
+                    height = _actualRect.origin.y + _actualRect.size.height - y;
+                }
+            }
+
             break;
         }
         case CornerBR: {
             y += deltaY;
             width += deltaX;
             height -= deltaY;
+
+            if (width >= 0 && height >= 0) {
+                if (x + width > _actualRect.origin.x + _actualRect.size.width) {
+                    width = _actualRect.origin.x + _actualRect.size.width - x;
+                }
+                if (y < _actualRect.origin.y) {
+                    height += (y - _actualRect.origin.y);
+                    y = _actualRect.origin.y;
+                }
+            } else if (width >= 0 && height < 0) {
+                y += height;
+                height = -height;
+
+                if (x + width > _actualRect.origin.x + _actualRect.size.width) {
+                    width = _actualRect.origin.x + _actualRect.size.width - x;
+                }
+                if (y + height > _actualRect.origin.y + _actualRect.size.height) {
+                    height = _actualRect.origin.y + _actualRect.size.height - y;
+                }
+            } else if (width < 0 && height >= 0) {
+                x += width;
+                width = -width;
+
+                if (x < _actualRect.origin.x) {
+                    width += (x - _actualRect.origin.x);
+                    x = _actualRect.origin.x;
+                }
+                if (y < _actualRect.origin.y) {
+                    height += (y - _actualRect.origin.y);
+                    y = _actualRect.origin.y;
+                }
+            } else {
+                x += width;
+                y += height;
+                width = -width;
+                height = -height;
+
+                if (x < _actualRect.origin.x) {
+                    width += (x - _actualRect.origin.x);
+                    x = _actualRect.origin.x;
+                }
+                if (y + height > _actualRect.origin.y + _actualRect.size.height) {
+                    height = _actualRect.origin.y + _actualRect.size.height - y;
+                }
+            }
+
             break;
         }
         case CornerTR: {
             width += deltaX;
             height += deltaY;
+
+            if (width >= 0 && height >= 0) {
+                if (x + width > _actualRect.origin.x + _actualRect.size.width) {
+                    width = _actualRect.origin.x + _actualRect.size.width - x;
+                }
+                if (y + height > _actualRect.origin.y + _actualRect.size.height) {
+                    height = _actualRect.origin.y + _actualRect.size.height - y;
+                }
+            } else if (width >= 0 && height < 0) {
+                y += height;
+                height = -height;
+
+                if (x + width > _actualRect.origin.x + _actualRect.size.width) {
+                    width = _actualRect.origin.x + _actualRect.size.width - x;
+                }
+                if (y < _actualRect.origin.y) {
+                    height += (y - _actualRect.origin.y);
+                    y = _actualRect.origin.y;
+                }
+            } else if (width < 0 && height >= 0) {
+                x += width;
+                width = -width;
+
+                if (x < _actualRect.origin.x) {
+                    width += (x - _actualRect.origin.x);
+                    x = _actualRect.origin.x;
+                }
+                if (y + height > _actualRect.origin.y + _actualRect.size.height) {
+                    height = _actualRect.origin.y + _actualRect.size.height - y;
+                }
+            } else {
+                x += width;
+                y += height;
+                width = -width;
+                height = -height;
+
+                if (x < _actualRect.origin.x) {
+                    width += (x - _actualRect.origin.x);
+                    x = _actualRect.origin.x;
+                }
+                if (y < _actualRect.origin.y) {
+                    height += (y - _actualRect.origin.y);
+                    y = _actualRect.origin.y;
+                }
+            }
+
             break;
         }
         default:
@@ -228,6 +548,7 @@
 
 - (void)mouseUp:(NSEvent *)theEvent
 {
+    _cropCoreView.viewStatus = Normal;
     [[NSCursor arrowCursor] set];
 }
 

@@ -10,13 +10,32 @@
 
 @implementation VMCropCoreView
 
+@synthesize viewStatus = _viewStatus;
+
 - (BOOL)acceptsFirstResponder {
     return YES;
+}
+
+- (ViewStatus)viewStatus
+{
+    return _viewStatus;
+}
+
+- (void)setViewStatus:(ViewStatus)viewStatus
+{
+    [self willChangeValueForKey:@"viewStatus"];
+    _viewStatus = viewStatus;
+    [self setNeedsDisplay:YES];
+    [self didChangeValueForKey:@"viewStatus"];
 }
 
 - (void)drawRect:(NSRect)dirtyRect
 {
     [super drawRect:dirtyRect];
+
+    if (self.viewStatus == None) {
+        return;
+    }
 
     NSBezierPath *path = [NSBezierPath bezierPathWithRect:self.bounds];
     [path setLineWidth:kBorderWidth];
@@ -57,6 +76,21 @@
         [[NSColor greenColor] set];
         [corners setLineWidth:kBorderWidth];
         [corners stroke];
+
+        if (self.viewStatus == Dragging) {
+            NSBezierPath *thirdLines = [NSBezierPath bezierPath];
+            [thirdLines moveToPoint:NSMakePoint(0, self.bounds.size.height / 3)];
+            [thirdLines lineToPoint:NSMakePoint(self.bounds.size.width, self.bounds.size.height / 3)];
+            [thirdLines moveToPoint:NSMakePoint(0, 2 * self.bounds.size.height / 3)];
+            [thirdLines lineToPoint:NSMakePoint(self.bounds.size.width, 2 * self.bounds.size.height / 3)];
+            [thirdLines moveToPoint:NSMakePoint(self.bounds.size.width / 3, 0)];
+            [thirdLines lineToPoint:NSMakePoint(self.bounds.size.width / 3, self.bounds.size.height)];
+            [thirdLines moveToPoint:NSMakePoint(2 * self.bounds.size.width / 3, 0)];
+            [thirdLines lineToPoint:NSMakePoint(2 * self.bounds.size.width / 3, self.bounds.size.height)];
+            [thirdLines setLineWidth:1];
+            [[[NSColor whiteColor] colorWithAlphaComponent:0.8] set];
+            [thirdLines stroke];
+        }
     }
 }
 

@@ -12,6 +12,39 @@
 #define kSideWidth 4
 #define kCropWindowMinSize 8
 
+@implementation VMCropConstraints
+
+@synthesize description = _description;
+
+- (void)setDescription:(NSString *)description
+{
+    [self willChangeValueForKey:@"description"];
+    _description = description;
+    [self didChangeValueForKey:@"description"];
+}
+
+- (NSString *)description
+{
+    if ([_description rangeOfString:@"$DIMEN"].location != NSNotFound) {
+        NSString *dimen = [NSString stringWithFormat:@"%.0f × %.0f", self.width, self.height];
+        return [_description stringByReplacingOccurrencesOfString:@"$DIMEN" withString:dimen];
+    }
+    return _description;
+}
+
+- (id)initWithDictionary:(NSDictionary *)dictionary
+{
+    if (self = [super init]) {
+        self.width = [[dictionary objectForKey:@"Width"] floatValue];
+        self.height = [[dictionary objectForKey:@"Height"] floatValue];
+        self.description = [dictionary objectForKey:@"Description"];
+    }
+
+    return self;
+}
+
+@end
+
 @interface VMCropperImageView (ImageSize)
 
 - (CGSize)imageScale;
@@ -27,6 +60,9 @@
 @end
 
 @implementation VMCropperImageView
+
+@synthesize avaliableConstraints = _avaliableConstraints;
+@synthesize currentConstraintIndex = _currentConstraintIndex;
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
@@ -67,6 +103,92 @@
 
     [cropped unlockFocus];
     return cropped;
+}
+
+#pragma mark -
+#pragma mark Constraints
+- (void)setConstraintsFilePath:(NSString *)filepath
+{
+    NSArray *extraConstraints = [NSArray arrayWithContentsOfFile:filepath];
+    NSMutableArray *constraints = [[NSMutableArray alloc] initWithArray:[self builtInConstraints]];
+    for (NSDictionary *constraintDict in extraConstraints) {
+        VMCropConstraints *constraint = [[VMCropConstraints alloc] initWithDictionary:constraintDict];
+        [constraints addObject:constraint];
+    }
+
+    self.avaliableConstraints = [constraints copy];;
+    self.currentConstraintIndex = 0; // Reset to none
+}
+
+- (NSArray *)avaliableConstraints
+{
+    if (!_avaliableConstraints) {
+        _avaliableConstraints = [self builtInConstraints];
+    }
+    return _avaliableConstraints;
+}
+
+- (void)setAvaliableConstraints:(NSArray *)avaliableConstraints
+{
+    [self willChangeValueForKey:@"avaliableConstraints"];
+    _avaliableConstraints = avaliableConstraints;
+    [self didChangeValueForKey:@"avaliableConstraints"];
+}
+
+- (NSUInteger)currentConstraintIndex
+{
+    return _currentConstraintIndex;
+}
+
+- (void)setCurrentConstraintIndex:(NSUInteger)currentConstraintIndex
+{
+    [self willChangeValueForKey:@"currentConstraintIndex"];
+    _currentConstraintIndex = currentConstraintIndex;
+
+    float imageAspect = self.image.size.width / self.image.size.height;
+    VMCropConstraints *curConstraint = [self.avaliableConstraints objectAtIndex:currentConstraintIndex];
+    float width = _actualRect.size.width;
+    float height = _actualRect.size.height;
+    if (curConstraint.width > 0 && curConstraint.height > 0) {
+        float constraintAspect = curConstraint.width / curConstraint.height;
+        if (imageAspect >= constraintAspect) {
+            height = _actualRect.size.height;
+            width = height * constraintAspect;
+        } else {
+            width = _actualRect.size.width;
+            height = width / constraintAspect;
+        }
+    }
+    _cropCoreView.frame = NSMakeRect(_actualRect.origin.x + (_actualRect.size.width - width) * 0.5,
+                                     _actualRect.origin.y + (_actualRect.size.height - height) * 0.5,
+                                     width,
+                                     height);
+
+    [self didChangeValueForKey:@"currentConstraintIndex"];
+}
+
+- (NSArray *)builtInConstraints {
+    NSMutableArray *builtInConstraints = [[NSMutableArray alloc] init];
+    VMCropConstraints *noneConstraints = [[VMCropConstraints alloc] init];
+    noneConstraints.description = @"None";
+    noneConstraints.width = -1;
+    noneConstraints.height = -1;
+    [builtInConstraints addObject:noneConstraints];
+
+    VMCropConstraints *originSize = [[VMCropConstraints alloc] init];
+    originSize.description = @"$DIMEN (Original Size)";
+    originSize.width = self.image.size.width;
+    originSize.height = self.image.size.height;
+    [builtInConstraints addObject:originSize];
+
+    VMCropConstraints *resolutionConstraints = [[VMCropConstraints alloc] init];
+    NSScreen *mainScreen = [NSScreen mainScreen];
+    resolutionConstraints.description = @"$DIMEN (Screen Resolution)";
+    resolutionConstraints.width = mainScreen.frame.size.width;
+    resolutionConstraints.height = mainScreen.frame.size.height;
+    [builtInConstraints addObject:resolutionConstraints];
+
+    return [builtInConstraints copy];
 }
 
 #pragma mark -
@@ -173,9 +295,7 @@
     _startPoint = [theEvent locationInWindow];
     _startFrame = _cropCoreView.frame;
 
-    if (NSPointInRect(_startPoint, _cropCoreView.frame)) {
-        _cropCoreView.viewStatus = Dragging;
-    }
+    _cropCoreView.viewStatus = Dragging;
 }
 
 - (void)mouseDragged:(NSEvent *)theEvent
@@ -184,6 +304,12 @@
 
     CGFloat deltaX = curPoint.x - _startPoint.x;
     CGFloat deltaY = curPoint.y - _startPoint.y;
+
+    VMCropConstraints *curCrop = [self.avaliableConstraints objectAtIndex:self.currentConstraintIndex];
+    float aspectRatio = -1;
+    if (curCrop.width > 0 && curCrop.height > 0) {
+        aspectRatio = curCrop.width / curCrop.height;
+    }
 
     CGFloat x = _startFrame.origin.x;
     CGFloat y = _startFrame.origin.y;
@@ -200,6 +326,13 @@
                     y = newOrigin.y;
                     width = fmaxf(deltaX, kCropWindowMinSize);
                     height = fmaxf(deltaY, kCropWindowMinSize);
+
+                    float curAspectRatio = width / height;
+                    if (curAspectRatio >= aspectRatio) {
+                        height = width / aspectRatio;
+                    } else {
+                        width = height * aspectRatio;
+                    }
 
                     if (x + width > _actualRect.origin.x + _actualRect.size.width) {
                         width = _actualRect.origin.x + _actualRect.size.width - x;

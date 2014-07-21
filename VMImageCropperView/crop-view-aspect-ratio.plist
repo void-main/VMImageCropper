@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>Description</key>
+		<string>$DIMEN (iPhone)</string>
+		<key>Width</key>
+		<integer>2</integer>
+		<key>Height</key>
+		<integer>3</integer>
+	</dict>
+	<dict>
+		<key>Description</key>
+		<string>$DIMEN (HD)</string>
+		<key>Width</key>
+		<integer>16</integer>
+		<key>Height</key>
+		<integer>9</integer>
+	</dict>
+	<dict>
+		<key>Description</key>
+		<string>Square</string>
+		<key>Width</key>
+		<integer>1</integer>
+		<key>Height</key>
+		<integer>1</integer>
+	</dict>
+</array>
+</plist>

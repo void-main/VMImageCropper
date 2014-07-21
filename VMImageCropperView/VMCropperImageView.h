@@ -30,6 +30,16 @@ typedef enum : NSUInteger {
     CornerBR,
 } DragType;
 
+@interface VMCropConstraints : NSObject
+
+@property (nonatomic, strong) NSString *description;
+@property                     CGFloat  width;
+@property                     CGFloat  height;
+
+- (id)initWithDictionary:(NSDictionary *)dictionary;
+
+@end
+
 @class VMCropCoreView;
 @interface VMCropperImageView : NSImageView {
     CGRect _actualRect;
@@ -42,6 +52,10 @@ typedef enum : NSUInteger {
 
     VMCropCoreView *_cropCoreView;
 }
+
+- (void)setConstraintsFilePath:(NSString *)filepath;
+@property (nonatomic, strong) NSArray *avaliableConstraints;
+@property                     NSUInteger currentConstraintIndex;
 
 - (NSImage *)croppedImage;
 

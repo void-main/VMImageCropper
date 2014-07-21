@@ -690,9 +690,34 @@
                             <action selector="cropImage:" target="Voe-Tx-rLC" id="sMe-ag-3fv"/>
                         </connections>
                     </toolbarItem>
+                    <toolbarItem implicitItemIdentifier="A09547BF-7150-4BD1-B588-4D458AAE1924" label="Constraints" paletteLabel="Constraints" id="W5V-oX-9UX">
+                        <nil key="toolTip"/>
+                        <size key="minSize" width="100" height="28"/>
+                        <size key="maxSize" width="100" height="28"/>
+                        <popUpButton key="view" verticalHuggingPriority="750" id="Epi-PM-tsQ">
+                            <rect key="frame" x="0.0" y="14" width="100" height="28"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <popUpButtonCell key="cell" type="roundTextured" title="Item 1" bezelStyle="texturedRounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" selectedItem="azl-qp-g1D" id="rrF-Uh-Wxo">
+                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                <font key="font" metaFont="system"/>
+                                <menu key="menu" title="OtherViews" id="vDB-E3-F6j">
+                                    <items>
+                                        <menuItem title="Item 1" state="on" id="azl-qp-g1D"/>
+                                        <menuItem title="Item 2" id="xeH-zp-6e5"/>
+                                        <menuItem title="Item 3" id="6ho-cX-3Ka"/>
+                                    </items>
+                                </menu>
+                            </popUpButtonCell>
+                            <connections>
+                                <binding destination="Voe-Tx-rLC" name="contentValues" keyPath="self.cropperView.avaliableConstraints" id="jio-hH-CoO"/>
+                                <binding destination="Voe-Tx-rLC" name="selectedIndex" keyPath="self.cropperView.currentConstraintIndex" previousBinding="jio-hH-CoO" id="RDC-oz-aM7"/>
+                            </connections>
+                        </popUpButton>
+                    </toolbarItem>
                 </allowedToolbarItems>
                 <defaultToolbarItems>
                     <toolbarItem reference="UEr-nX-voJ"/>
+                    <toolbarItem reference="W5V-oX-9UX"/>
                 </defaultToolbarItems>
             </toolbar>
         </window>

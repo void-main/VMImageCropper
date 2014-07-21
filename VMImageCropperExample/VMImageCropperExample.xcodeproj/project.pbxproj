@@ -21,6 +21,7 @@
 		DF31B7B8197B994200ECAEB1 /* VMCropperImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = DF31B7B7197B994200ECAEB1 /* VMCropperImageView.m */; };
 		DF31B7BC197B9CCB00ECAEB1 /* IMG.jpg in Resources */ = {isa = PBXBuildFile; fileRef = DF31B7BB197B9CCB00ECAEB1 /* IMG.jpg */; };
 		DF31B7C2197BF20A00ECAEB1 /* VMCropCoreView.m in Sources */ = {isa = PBXBuildFile; fileRef = DF31B7C1197BF20A00ECAEB1 /* VMCropCoreView.m */; };
+		DFD40639197CFE5600DD73D9 /* crop-view-aspect-ratio.plist in Resources */ = {isa = PBXBuildFile; fileRef = DFD40638197CFE5600DD73D9 /* crop-view-aspect-ratio.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +59,7 @@
 		DF31B7BB197B9CCB00ECAEB1 /* IMG.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = IMG.jpg; path = ../IMG.jpg; sourceTree = "<group>"; };
 		DF31B7C0197BF20A00ECAEB1 /* VMCropCoreView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VMCropCoreView.h; path = ../../VMImageCropperView/VMCropCoreView.h; sourceTree = "<group>"; };
 		DF31B7C1197BF20A00ECAEB1 /* VMCropCoreView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VMCropCoreView.m; path = ../../VMImageCropperView/VMCropCoreView.m; sourceTree = "<group>"; };
+		DFD40638197CFE5600DD73D9 /* crop-view-aspect-ratio.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "crop-view-aspect-ratio.plist"; path = "../../VMImageCropperView/crop-view-aspect-ratio.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -167,6 +169,7 @@
 		DF31B7B5197B992300ECAEB1 /* VMImageCropperView */ = {
 			isa = PBXGroup;
 			children = (
+				DFD40638197CFE5600DD73D9 /* crop-view-aspect-ratio.plist */,
 				DF31B7B6197B994200ECAEB1 /* VMCropperImageView.h */,
 				DF31B7B7197B994200ECAEB1 /* VMCropperImageView.m */,
 				DF31B7C0197BF20A00ECAEB1 /* VMCropCoreView.h */,
@@ -255,6 +258,7 @@
 				DF31B78C197B983600ECAEB1 /* InfoPlist.strings in Resources */,
 				DF31B79A197B983600ECAEB1 /* Images.xcassets in Resources */,
 				DF31B7BC197B9CCB00ECAEB1 /* IMG.jpg in Resources */,
+				DFD40639197CFE5600DD73D9 /* crop-view-aspect-ratio.plist in Resources */,
 				DF31B792197B983600ECAEB1 /* Credits.rtf in Resources */,
 				DF31B798197B983600ECAEB1 /* MainMenu.xib in Resources */,
 			);
@@ -491,6 +495,7 @@
 				DF31B7B1197B983700ECAEB1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		DF31B7B2197B983700ECAEB1 /* Build configuration list for PBXNativeTarget "VMImageCropperExampleTests" */ = {
 			isa = XCConfigurationList;
@@ -499,6 +504,7 @@
 				DF31B7B4197B983700ECAEB1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

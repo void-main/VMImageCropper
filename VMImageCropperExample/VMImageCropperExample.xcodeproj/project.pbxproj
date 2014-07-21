@@ -18,6 +18,9 @@
 		DF31B7A2197B983700ECAEB1 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DF31B781197B983600ECAEB1 /* Cocoa.framework */; };
 		DF31B7AA197B983700ECAEB1 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = DF31B7A8197B983700ECAEB1 /* InfoPlist.strings */; };
 		DF31B7AC197B983700ECAEB1 /* VMImageCropperExampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = DF31B7AB197B983700ECAEB1 /* VMImageCropperExampleTests.m */; };
+		DF31B7B8197B994200ECAEB1 /* VMCropperImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = DF31B7B7197B994200ECAEB1 /* VMCropperImageView.m */; };
+		DF31B7BC197B9CCB00ECAEB1 /* IMG.jpg in Resources */ = {isa = PBXBuildFile; fileRef = DF31B7BB197B9CCB00ECAEB1 /* IMG.jpg */; };
+		DF31B7C2197BF20A00ECAEB1 /* VMCropCoreView.m in Sources */ = {isa = PBXBuildFile; fileRef = DF31B7C1197BF20A00ECAEB1 /* VMCropCoreView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,6 +53,11 @@
 		DF31B7A7197B983700ECAEB1 /* VMImageCropperExampleTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "VMImageCropperExampleTests-Info.plist"; sourceTree = "<group>"; };
 		DF31B7A9197B983700ECAEB1 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		DF31B7AB197B983700ECAEB1 /* VMImageCropperExampleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VMImageCropperExampleTests.m; sourceTree = "<group>"; };
+		DF31B7B6197B994200ECAEB1 /* VMCropperImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VMCropperImageView.h; path = ../../VMImageCropperView/VMCropperImageView.h; sourceTree = "<group>"; };
+		DF31B7B7197B994200ECAEB1 /* VMCropperImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VMCropperImageView.m; path = ../../VMImageCropperView/VMCropperImageView.m; sourceTree = "<group>"; };
+		DF31B7BB197B9CCB00ECAEB1 /* IMG.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = IMG.jpg; path = ../IMG.jpg; sourceTree = "<group>"; };
+		DF31B7C0197BF20A00ECAEB1 /* VMCropCoreView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VMCropCoreView.h; path = ../../VMImageCropperView/VMCropCoreView.h; sourceTree = "<group>"; };
+		DF31B7C1197BF20A00ECAEB1 /* VMCropCoreView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VMCropCoreView.m; path = ../../VMImageCropperView/VMCropCoreView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,6 +84,7 @@
 		DF31B775197B983600ECAEB1 = {
 			isa = PBXGroup;
 			children = (
+				DF31B7B5197B992300ECAEB1 /* VMImageCropperView */,
 				DF31B787197B983600ECAEB1 /* VMImageCropperExample */,
 				DF31B7A5197B983700ECAEB1 /* VMImageCropperExampleTests */,
 				DF31B780197B983600ECAEB1 /* Frameworks */,
@@ -119,6 +128,7 @@
 				DF31B794197B983600ECAEB1 /* VMAppDelegate.m */,
 				DF31B796197B983600ECAEB1 /* MainMenu.xib */,
 				DF31B799197B983600ECAEB1 /* Images.xcassets */,
+				DF31B7BB197B9CCB00ECAEB1 /* IMG.jpg */,
 				DF31B788197B983600ECAEB1 /* Supporting Files */,
 			);
 			path = VMImageCropperExample;
@@ -152,6 +162,17 @@
 				DF31B7A8197B983700ECAEB1 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		DF31B7B5197B992300ECAEB1 /* VMImageCropperView */ = {
+			isa = PBXGroup;
+			children = (
+				DF31B7B6197B994200ECAEB1 /* VMCropperImageView.h */,
+				DF31B7B7197B994200ECAEB1 /* VMCropperImageView.m */,
+				DF31B7C0197BF20A00ECAEB1 /* VMCropCoreView.h */,
+				DF31B7C1197BF20A00ECAEB1 /* VMCropCoreView.m */,
+			);
+			path = VMImageCropperView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -233,6 +254,7 @@
 			files = (
 				DF31B78C197B983600ECAEB1 /* InfoPlist.strings in Resources */,
 				DF31B79A197B983600ECAEB1 /* Images.xcassets in Resources */,
+				DF31B7BC197B9CCB00ECAEB1 /* IMG.jpg in Resources */,
 				DF31B792197B983600ECAEB1 /* Credits.rtf in Resources */,
 				DF31B798197B983600ECAEB1 /* MainMenu.xib in Resources */,
 			);
@@ -253,7 +275,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DF31B7B8197B994200ECAEB1 /* VMCropperImageView.m in Sources */,
 				DF31B78E197B983600ECAEB1 /* main.m in Sources */,
+				DF31B7C2197BF20A00ECAEB1 /* VMCropCoreView.m in Sources */,
 				DF31B795197B983600ECAEB1 /* VMAppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -8,8 +8,10 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class VMCropperImageView;
 @interface VMAppDelegate : NSObject <NSApplicationDelegate>
 
 @property (assign) IBOutlet NSWindow *window;
+@property (weak) IBOutlet VMCropperImageView *cropperView;
 
 @end

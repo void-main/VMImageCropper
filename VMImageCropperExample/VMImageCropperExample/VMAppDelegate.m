@@ -7,12 +7,14 @@
 //
 
 #import "VMAppDelegate.h"
+#import "VMCropperImageView.h"
 
 @implementation VMAppDelegate
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
-    // Insert code here to initialize your application
+    NSImage *testImage = [NSImage imageNamed:@"IMG.jpg"];
+    self.cropperView.image = testImage;
 }
 
 @end

@@ -683,6 +683,21 @@
                     </imageView>
                 </subviews>
             </view>
+            <toolbar key="toolbar" implicitIdentifier="6EFAC070-DEC2-4CB7-82F0-F5F866E09DC6" autosavesConfiguration="NO" displayMode="iconAndLabel" sizeMode="regular" id="RXh-6n-aps">
+                <allowedToolbarItems>
+                    <toolbarItem implicitItemIdentifier="51DA8E48-E5BF-4634-BBF7-E69C78D10ECD" label="Crop" paletteLabel="Crop" tag="-1" image="CropIcon" id="UEr-nX-voJ">
+                        <connections>
+                            <action selector="cropImage:" target="Voe-Tx-rLC" id="sMe-ag-3fv"/>
+                        </connections>
+                    </toolbarItem>
+                </allowedToolbarItems>
+                <defaultToolbarItems>
+                    <toolbarItem reference="UEr-nX-voJ"/>
+                </defaultToolbarItems>
+            </toolbar>
         </window>
     </objects>
+    <resources>
+        <image name="CropIcon" width="32" height="32"/>
+    </resources>
 </document>

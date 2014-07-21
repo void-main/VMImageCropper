@@ -50,10 +50,20 @@
 
 - (NSImage *)croppedImage
 {
-    NSImage *cropped = [[NSImage alloc] initWithSize:_cropCoreView.frame.size];
+    NSRect ratioRect = NSMakeRect((_cropCoreView.frame.origin.x - _actualRect.origin.x) / _actualRect.size.width,
+                                  (_cropCoreView.frame.origin.y - _actualRect.origin.y) / _actualRect.size.height,
+                                  _cropCoreView.frame.size.width / _actualRect.size.width,
+                                  _cropCoreView.frame.size.height / _actualRect.size.height);
+
+    NSRect actualRect = NSMakeRect(ratioRect.origin.x * self.image.size.width,
+                                   ratioRect.origin.y * self.image.size.height,
+                                   ratioRect.size.width * self.image.size.width,
+                                   ratioRect.size.height * self.image.size.height);
+    NSImage *cropped = [[NSImage alloc] initWithSize:actualRect.size];
     [cropped lockFocus];
 
     // Draw the cropped region
+    [self.image drawInRect:NSMakeRect(0, 0, actualRect.size.width, actualRect.size.height) fromRect:actualRect operation:NSCompositeSourceOut fraction:1.0];
 
     [cropped unlockFocus];
     return cropped;

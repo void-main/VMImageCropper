@@ -17,4 +17,8 @@
     self.cropperView.image = testImage;
 }
 
+- (IBAction)cropImage:(id)sender {
+    self.cropperView.image = [self.cropperView croppedImage];
+}
+
 @end

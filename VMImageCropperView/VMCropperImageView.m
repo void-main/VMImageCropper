@@ -111,6 +111,11 @@ static void *VMCropperImageViewContext = nil;
     NSRect oldActualRect = _actualRect;
     NSRect cropCoreFrame = _cropCoreView.frame;
     _actualRect = [self imageRect];
+
+    if (_actualRect.size.width < FLT_EPSILON && _actualRect.size.height < FLT_EPSILON) {
+        return;
+    }
+
     float x = (cropCoreFrame.origin.x - oldActualRect.origin.x) / oldActualRect.size.width * _actualRect.size.width + _actualRect.origin.x;
     float y = (cropCoreFrame.origin.y - oldActualRect.origin.y) / oldActualRect.size.height * _actualRect.size.height + _actualRect.origin.y;
     float width = cropCoreFrame.size.width / oldActualRect.size.width * _actualRect.size.width;
@@ -954,10 +959,10 @@ static void *VMCropperImageViewContext = nil;
     CGFloat y1 = MIN(_initialTouches[0].normalizedPosition.y, _initialTouches[1].normalizedPosition.y);
     CGFloat y2 = MIN(_currentTouches[0].normalizedPosition.y, _currentTouches[1].normalizedPosition.y);
 
-    NSSize deviceSize = _initialTouches[0].deviceSize;
+//    NSSize deviceSize = _initialTouches[0].deviceSize;
     NSPoint delta;
-    delta.x = (x2 - x1) * deviceSize.width;
-    delta.y = (y2 - y1) * deviceSize.height;
+    delta.x = (x2 - x1);// * deviceSize.width;
+    delta.y = (y2 - y1);// * deviceSize.height;
     return delta;
 }
 
@@ -982,10 +987,10 @@ static void *VMCropperImageViewContext = nil;
     y2 = MAX(_currentTouches[0].normalizedPosition.y, _currentTouches[1].normalizedPosition.y);
     height2 = y2 - y1;
 
-    NSSize deviceSize = _initialTouches[0].deviceSize;
+//    NSSize deviceSize = _initialTouches[0].deviceSize;
     NSSize delta;
-    delta.width = (width2 - width1) * deviceSize.width;
-    delta.height = (height2 - height1) * deviceSize.height;
+    delta.width = (width2 - width1);// * deviceSize.width;
+    delta.height = (height2 - height1);// * deviceSize.height;
     return delta;
 }
 
@@ -1008,17 +1013,75 @@ static void *VMCropperImageViewContext = nil;
 
 - (void)duelTouchMoved
 {
-    CGPoint deltaOrigin = NSMakePoint(self.deltaOrigin.x / self.frame.size.width, self.deltaOrigin.y / self.frame.size.height);
-    deltaOrigin = NSMakePoint(deltaOrigin.x * _cropCoreView.frame.size.width, deltaOrigin.y * _cropCoreView.frame.size.height);
+    NSSize deltaSize = NSMakeSize(self.deltaSize.width * self.frame.size.width, self.deltaSize.height * self.frame.size.height);
 
-    CGSize deltaSize = NSMakeSize(self.deltaSize.width / self.frame.size.width, self.deltaSize.height / self.frame.size.height);
-    deltaSize = NSMakeSize(2 * deltaSize.width * _cropCoreView.frame.size.width, 2 * deltaSize.height * _cropCoreView.frame.size.height);
+    VMCropConstraints *curCrop = [self.avaliableConstraints objectAtIndex:self.currentConstraintIndex];
+    float aspectRatio = -1;
+    if (curCrop.width > 0 && curCrop.height > 0) {
+        aspectRatio = curCrop.width / curCrop.height;
+    }
 
-//    NSRect oldFrame = _initialFrame;
-//    _cropCoreView.frame = NSMakeRect(oldFrame.origin.x + deltaOrigin.x - deltaSize.width * 0.5,
-//                                     oldFrame.origin.y + deltaOrigin.y - deltaSize.height * 0.5,
-//                                     oldFrame.size.width + deltaSize.width,
-//                                     oldFrame.size.height + deltaSize.height);
+    NSRect oldFrame = _initialFrame;
+    NSRect newFrame;
+    if (aspectRatio > 0) {
+        float diff = fmaxf(deltaSize.width, deltaSize.height);
+        newFrame = NSMakeRect(oldFrame.origin.x - diff,
+                                     oldFrame.origin.y - diff,
+                                     oldFrame.size.width + 2 * diff,
+                                     oldFrame.size.height + 2 * diff);
+
+        float diffWidth = newFrame.origin.x + newFrame.size.width - _actualRect.origin.x - _actualRect.size.width;
+        float diffHeight = newFrame.origin.y + newFrame.size.height - _actualRect.origin.y - _actualRect.size.height;
+
+        if (fmaxf(diffWidth, diffHeight) > 0) {
+            if (diffWidth > diffHeight) {
+                diffHeight = diffWidth / aspectRatio;
+            } else {
+                diffWidth = diffHeight * aspectRatio;
+            }
+        } else {
+            diffWidth = 0;
+            diffHeight = 0;
+        }
+
+        newFrame = NSMakeRect(newFrame.origin.x + diffWidth,
+                              newFrame.origin.y + diffHeight,
+                              newFrame.size.width - 2 * diffWidth,
+                              newFrame.size.height - 2 * diffHeight);
+
+        if (newFrame.size.width < kCropWindowMinSize) {
+            float diffWidth = kCropWindowMinSize - newFrame.size.width;
+            float diffHeight = diffWidth / aspectRatio;
+            newFrame = NSMakeRect(newFrame.origin.x - diffWidth * 0.5, newFrame.origin.y - diffHeight * 0.5, newFrame.size.width + diffWidth, newFrame.size.height + diffHeight);
+        } else if (newFrame.size.height < kCropWindowMinSize) {
+            float diffHeight = kCropWindowMinSize - newFrame.size.height;
+            float diffWidth = diffHeight * aspectRatio;
+            newFrame = NSMakeRect(newFrame.origin.x - diffWidth * 0.5, newFrame.origin.y - diffHeight * 0.5, newFrame.size.width + diffWidth, newFrame.size.height + diffHeight);
+        }
+    } else {
+        newFrame = NSMakeRect(oldFrame.origin.x - deltaSize.width,
+                                     oldFrame.origin.y - deltaSize.height,
+                                     oldFrame.size.width + 2 * deltaSize.width,
+                                     oldFrame.size.height + 2 * deltaSize.height);
+        newFrame = NSRectFromCGRect(CGRectIntersection(NSRectToCGRect(newFrame), NSRectToCGRect(_actualRect)));
+
+        if (newFrame.size.width < kCropWindowMinSize) {
+            float diffWidth = kCropWindowMinSize - newFrame.size.width;
+            newFrame = NSMakeRect(newFrame.origin.x - diffWidth * 0.5,
+                                  newFrame.origin.y,
+                                  newFrame.size.width + diffWidth,
+                                  newFrame.size.height);
+        }
+        if (newFrame.size.height < kCropWindowMinSize) {
+            float diffHeight = kCropWindowMinSize - newFrame.size.height;
+            newFrame = NSMakeRect(newFrame.origin.x,
+                                  newFrame.origin.y - diffHeight * 0.5,
+                                  newFrame.size.width,
+                                  newFrame.size.height + diffHeight);
+        }
+    }
+
+    _cropCoreView.frame = newFrame;
 }
 
 

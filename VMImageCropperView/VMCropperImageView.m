@@ -788,212 +788,28 @@
             }
             break;
         }
-        case CornerTL: {
-            x += deltaX;
-            width -= deltaX;
-            height += deltaY;
-
-            if (width >= 0 && height >= 0) {
-                if (x < _actualRect.origin.x) {
-                    width += (x - _actualRect.origin.x);
-                    x = _actualRect.origin.x;
-                }
-                if (y + height > _actualRect.origin.y + _actualRect.size.height) {
-                    height = _actualRect.origin.y + _actualRect.size.height - y;
-                }
-            } else if (width >= 0 && height < 0) {
-                y += height;
-                height = -height;
-
-                if (x < _actualRect.origin.x) {
-                    width += (x - _actualRect.origin.x);
-                    x = _actualRect.origin.x;
-                }
-                if (y < _actualRect.origin.y) {
-                    height += (y - _actualRect.origin.y);
-                    y = _actualRect.origin.y;
-                }
-            } else if (width < 0 && height >= 0) {
-                x += width;
-                width = -width;
-
-                if (x + width > _actualRect.origin.x + _actualRect.size.width) {
-                    width = _actualRect.origin.x + _actualRect.size.width - x;
-                }
-                if (y + height > _actualRect.origin.y + _actualRect.size.height) {
-                    height = _actualRect.origin.y + _actualRect.size.height - y;
-                }
-            } else {
-                x += width;
-                y += height;
-                width = -width;
-                height = -height;
-
-                if (x + width > _actualRect.origin.x + _actualRect.size.width) {
-                    width = _actualRect.origin.x + _actualRect.size.width - x;
-                }
-                if (y < _actualRect.origin.y) {
-                    height += (y - _actualRect.origin.y);
-                    y = _actualRect.origin.y;
-                }
-            }
-
+        case CornerTL: { // Origin is BR
+            NSPoint newOrigin = NSMakePoint(_cropCoreView.frame.origin.x + _cropCoreView.frame.size.width, _cropCoreView.frame.origin.y);
+            _startPoint = [self convertPoint:newOrigin toView:nil];
+            _dragType = New;
             break;
         }
-        case CornerBL: {
-            x += deltaX;
-            y += deltaY;
-            width -= deltaX;
-            height -= deltaY;
-
-            if (width >= 0 && height >= 0) {
-                if (x < _actualRect.origin.x) {
-                    width += (x - _actualRect.origin.x);
-                    x = _actualRect.origin.x;
-                }
-                if (y < _actualRect.origin.y) {
-                    height += (y - _actualRect.origin.y);
-                    y = _actualRect.origin.y;
-                }
-            } else if (width >= 0 && height < 0) {
-                y += height;
-                height = -height;
-
-                if (x < _actualRect.origin.x) {
-                    width += (x - _actualRect.origin.x);
-                    x = _actualRect.origin.x;
-                }
-                if (y + height > _actualRect.origin.y + _actualRect.size.height) {
-                    height = _actualRect.origin.y + _actualRect.size.height - y;
-                }
-            } else if (width < 0 && height >= 0) {
-                x += width;
-                width = -width;
-
-                if (x + width > _actualRect.origin.x + _actualRect.size.width) {
-                    width = _actualRect.origin.x + _actualRect.size.width - x;
-                }
-                if (y < _actualRect.origin.y) {
-                    height += (y - _actualRect.origin.y);
-                    y = _actualRect.origin.y;
-                }
-            } else {
-                x += width;
-                y += height;
-                width = -width;
-                height = -height;
-
-                if (x + width > _actualRect.origin.x + _actualRect.size.width) {
-                    width = _actualRect.origin.x + _actualRect.size.width - x;
-                }
-                if (y + height > _actualRect.origin.y + _actualRect.size.height) {
-                    height = _actualRect.origin.y + _actualRect.size.height - y;
-                }
-            }
-
+        case CornerBL: { // Origin is TR
+            NSPoint newOrigin = NSMakePoint(_cropCoreView.frame.origin.x + _cropCoreView.frame.size.width, _cropCoreView.frame.origin.y + _cropCoreView.frame.size.height);
+            _startPoint = [self convertPoint:newOrigin toView:nil];
+            _dragType = New;
             break;
         }
-        case CornerBR: {
-            y += deltaY;
-            width += deltaX;
-            height -= deltaY;
-
-            if (width >= 0 && height >= 0) {
-                if (x + width > _actualRect.origin.x + _actualRect.size.width) {
-                    width = _actualRect.origin.x + _actualRect.size.width - x;
-                }
-                if (y < _actualRect.origin.y) {
-                    height += (y - _actualRect.origin.y);
-                    y = _actualRect.origin.y;
-                }
-            } else if (width >= 0 && height < 0) {
-                y += height;
-                height = -height;
-
-                if (x + width > _actualRect.origin.x + _actualRect.size.width) {
-                    width = _actualRect.origin.x + _actualRect.size.width - x;
-                }
-                if (y + height > _actualRect.origin.y + _actualRect.size.height) {
-                    height = _actualRect.origin.y + _actualRect.size.height - y;
-                }
-            } else if (width < 0 && height >= 0) {
-                x += width;
-                width = -width;
-
-                if (x < _actualRect.origin.x) {
-                    width += (x - _actualRect.origin.x);
-                    x = _actualRect.origin.x;
-                }
-                if (y < _actualRect.origin.y) {
-                    height += (y - _actualRect.origin.y);
-                    y = _actualRect.origin.y;
-                }
-            } else {
-                x += width;
-                y += height;
-                width = -width;
-                height = -height;
-
-                if (x < _actualRect.origin.x) {
-                    width += (x - _actualRect.origin.x);
-                    x = _actualRect.origin.x;
-                }
-                if (y + height > _actualRect.origin.y + _actualRect.size.height) {
-                    height = _actualRect.origin.y + _actualRect.size.height - y;
-                }
-            }
-
+        case CornerBR: { // Origin is TL
+            NSPoint newOrigin = NSMakePoint(_cropCoreView.frame.origin.x, _cropCoreView.frame.origin.y + _cropCoreView.frame.size.height);
+            _startPoint = [self convertPoint:newOrigin toView:nil];
+            _dragType = New;
             break;
         }
-        case CornerTR: {
-            width += deltaX;
-            height += deltaY;
-
-            if (width >= 0 && height >= 0) {
-                if (x + width > _actualRect.origin.x + _actualRect.size.width) {
-                    width = _actualRect.origin.x + _actualRect.size.width - x;
-                }
-                if (y + height > _actualRect.origin.y + _actualRect.size.height) {
-                    height = _actualRect.origin.y + _actualRect.size.height - y;
-                }
-            } else if (width >= 0 && height < 0) {
-                y += height;
-                height = -height;
-
-                if (x + width > _actualRect.origin.x + _actualRect.size.width) {
-                    width = _actualRect.origin.x + _actualRect.size.width - x;
-                }
-                if (y < _actualRect.origin.y) {
-                    height += (y - _actualRect.origin.y);
-                    y = _actualRect.origin.y;
-                }
-            } else if (width < 0 && height >= 0) {
-                x += width;
-                width = -width;
-
-                if (x < _actualRect.origin.x) {
-                    width += (x - _actualRect.origin.x);
-                    x = _actualRect.origin.x;
-                }
-                if (y + height > _actualRect.origin.y + _actualRect.size.height) {
-                    height = _actualRect.origin.y + _actualRect.size.height - y;
-                }
-            } else {
-                x += width;
-                y += height;
-                width = -width;
-                height = -height;
-
-                if (x < _actualRect.origin.x) {
-                    width += (x - _actualRect.origin.x);
-                    x = _actualRect.origin.x;
-                }
-                if (y < _actualRect.origin.y) {
-                    height += (y - _actualRect.origin.y);
-                    y = _actualRect.origin.y;
-                }
-            }
-
+        case CornerTR: { // Origin is BL
+            NSPoint newOrigin = NSMakePoint(_cropCoreView.frame.origin.x, _cropCoreView.frame.origin.y);
+            _startPoint = [self convertPoint:newOrigin toView:nil];
+            _dragType = New;
             break;
         }
         default:

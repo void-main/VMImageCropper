@@ -676,12 +676,18 @@
                 <rect key="frame" x="0.0" y="0.0" width="800" height="600"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="f69-Qn-cis" customClass="VMCropperImageView">
+                    <imageView autoresizesSubviews="NO" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="1" verticalCompressionResistancePriority="1" translatesAutoresizingMaskIntoConstraints="NO" id="f69-Qn-cis" customClass="VMCropperImageView">
                         <rect key="frame" x="0.0" y="0.0" width="800" height="600"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="oGo-bF-3qM"/>
                     </imageView>
                 </subviews>
+                <constraints>
+                    <constraint firstItem="f69-Qn-cis" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" id="9jN-Ur-qSM"/>
+                    <constraint firstAttribute="bottom" secondItem="f69-Qn-cis" secondAttribute="bottom" id="aYq-Cv-t5u"/>
+                    <constraint firstItem="f69-Qn-cis" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" id="ifP-47-ReY"/>
+                    <constraint firstAttribute="trailing" secondItem="f69-Qn-cis" secondAttribute="trailing" id="kFq-Bd-SOg"/>
+                </constraints>
             </view>
             <toolbar key="toolbar" implicitIdentifier="6EFAC070-DEC2-4CB7-82F0-F5F866E09DC6" autosavesConfiguration="NO" displayMode="iconAndLabel" sizeMode="regular" id="RXh-6n-aps">
                 <allowedToolbarItems>
@@ -699,7 +705,7 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             <popUpButtonCell key="cell" type="roundTextured" title="Item 1" bezelStyle="texturedRounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" selectedItem="azl-qp-g1D" id="rrF-Uh-Wxo">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                <font key="font" metaFont="system"/>
+                                <font key="font" metaFont="menu"/>
                                 <menu key="menu" title="OtherViews" id="vDB-E3-F6j">
                                     <items>
                                         <menuItem title="Item 1" state="on" id="azl-qp-g1D"/>

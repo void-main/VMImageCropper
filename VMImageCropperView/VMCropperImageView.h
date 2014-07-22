@@ -51,6 +51,17 @@ typedef enum : NSUInteger {
     NSRect  _startFrame;
 
     VMCropCoreView *_cropCoreView;
+
+    // Multi touch
+    BOOL _tracking;
+    NSPoint _initialPoint;
+    NSUInteger _modifiers;
+    CGFloat _threshold;
+
+    NSTouch *_initialTouches[2];
+    NSTouch *_currentTouches[2];
+
+    NSRect _initialFrame;
 }
 
 - (void)setConstraintsFilePath:(NSString *)filepath;
@@ -58,5 +69,12 @@ typedef enum : NSUInteger {
 @property                     NSUInteger currentConstraintIndex;
 
 - (NSImage *)croppedImage;
+
+// Multi touch
+@property CGFloat threshold;
+@property(readonly) NSUInteger modifiers;
+@property(readonly) NSPoint deltaOrigin;
+@property(readonly) NSSize deltaSize;
+
 
 @end

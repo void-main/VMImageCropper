@@ -13,6 +13,8 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
+    self.cropperView.translatesAutoresizingMaskIntoConstraints = NO;
+
     NSImage *testImage = [NSImage imageNamed:@"IMG.jpg"];
     self.cropperView.image = testImage;
     [self.cropperView setConstraintsFilePath:[[NSBundle mainBundle] pathForResource:@"crop-view-aspect-ratio" ofType:@"plist"]];

@@ -61,6 +61,8 @@
 
 @implementation VMCropperImageView
 
+static void *VMCropperImageViewContext = nil;
+
 @synthesize avaliableConstraints = _avaliableConstraints;
 @synthesize currentConstraintIndex = _currentConstraintIndex;
 
@@ -70,9 +72,25 @@
         _cropCoreView = [[VMCropCoreView alloc] initWithFrame:NSMakeRect(-10000, -10000, 0, 0)];
         _cropCoreView.viewStatus = Normal;
         [self addSubview:_cropCoreView];
+
+        [self addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionNew context:&VMCropperImageViewContext];
     }
 
     return self;
+}
+
+- (void)dealloc
+{
+    [self removeObserver:self forKeyPath:@"frame"];
+}
+
+- (void)viewDidMoveToWindow
+{
+    [self.window setAcceptsMouseMovedEvents:YES];
+    [self setAcceptsTouchEvents:YES];
+    [self setWantsRestingTouches:YES];
+
+    self.translatesAutoresizingMaskIntoConstraints = NO;
 }
 
 - (void)setImage:(NSImage *)newImage
@@ -82,6 +100,22 @@
     _actualRect = [self imageRect];
     _cropCoreView.frame = _actualRect;
     [_cropCoreView setNeedsDisplay:YES];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if (context != &VMCropperImageViewContext) {
+        return [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
+
+    NSRect oldActualRect = _actualRect;
+    NSRect cropCoreFrame = _cropCoreView.frame;
+    _actualRect = [self imageRect];
+    float x = (cropCoreFrame.origin.x - oldActualRect.origin.x) / oldActualRect.size.width * _actualRect.size.width + _actualRect.origin.x;
+    float y = (cropCoreFrame.origin.y - oldActualRect.origin.y) / oldActualRect.size.height * _actualRect.size.height + _actualRect.origin.y;
+    float width = cropCoreFrame.size.width / oldActualRect.size.width * _actualRect.size.width;
+    float height = cropCoreFrame.size.height / oldActualRect.size.height * _actualRect.size.height;
+    _cropCoreView.frame = NSMakeRect(x, y, width, height);
 }
 
 - (NSImage *)croppedImage
@@ -193,11 +227,6 @@
 
 #pragma mark -
 #pragma mark Drag
-- (void)viewDidMoveToWindow
-{
-    [self.window setAcceptsMouseMovedEvents:YES];
-}
-
 - (BOOL)acceptsFirstResponder
 {
     return YES;
@@ -829,6 +858,169 @@
     [self.window enableCursorRects];
     [self.window resetCursorRects];
 }
+
+#pragma mark -
+#pragma mark Multitouch Scale Support
+- (void)touchesBeganWithEvent:(NSEvent *)event {
+    if (!self.isEnabled) return;
+
+    NSSet *touches = [event touchesMatchingPhase:NSTouchPhaseTouching inView:self];
+
+    if (touches.count == 2) {
+        _initialPoint = [self convertPoint:[event locationInWindow] fromView:nil];
+        NSArray *array = [touches allObjects];
+        _initialTouches[0] = [array objectAtIndex:0];
+        _initialTouches[1] = [array objectAtIndex:1];
+
+        _currentTouches[0] = _initialTouches[0];
+        _currentTouches[1] = _initialTouches[1];
+    } else if (touches.count > 2) {
+        // More than 2 touches. Only track 2.
+        if (_tracking) {
+            [self cancelTracking];
+        } else {
+            [self releaseTouches];
+        }
+
+    }
+}
+
+- (void)touchesMovedWithEvent:(NSEvent *)event {
+    if (!self.isEnabled) return;
+
+    _modifiers = [event modifierFlags];
+    NSSet *touches = [event touchesMatchingPhase:NSTouchPhaseTouching inView:self];
+
+    if (touches.count == 2 && _initialTouches[0]) {
+        NSArray *array = [touches allObjects];
+        _currentTouches[0] = nil;
+        _currentTouches[1] = nil;
+
+        NSTouch *touch;
+        touch = [array objectAtIndex:0];
+        if ([touch.identity isEqual:_initialTouches[0].identity]) {
+            _currentTouches[0] = touch;
+        } else {
+            _currentTouches[1] = touch;
+        }
+
+        touch = [array objectAtIndex:1];
+        if ([touch.identity isEqual:_initialTouches[0].identity]) {
+            _currentTouches[0] = touch;
+        } else {
+            _currentTouches[1] = touch;
+        }
+
+        if (!_tracking) {
+            NSPoint deltaOrigin = self.deltaOrigin;
+            NSSize  deltaSize = self.deltaSize;
+
+            if (fabs(deltaOrigin.x) > _threshold || fabs(deltaOrigin.y) > _threshold || fabs(deltaSize.width) > _threshold || fabs(deltaSize.height) > _threshold) {
+                _tracking = YES;
+                [self duelTouchBegin];
+            }
+        } else {
+            [self duelTouchMoved];
+        }
+    }
+}
+
+- (void)touchesEndedWithEvent:(NSEvent *)event {
+    if (!self.isEnabled) return;
+
+    _modifiers = [event modifierFlags];
+    [self cancelTracking];
+}
+
+- (void)touchesCancelledWithEvent:(NSEvent *)event {
+    [self cancelTracking];
+}
+
+#pragma mark InputTracker
+
+
+- (void)cancelTracking {
+    if (_tracking) {
+        _tracking = NO;
+        [self releaseTouches];
+    }
+}
+
+- (NSPoint)deltaOrigin {
+    if (!(_initialTouches[0] && _initialTouches[1] && _currentTouches[0] && _currentTouches[1])) return NSZeroPoint;
+
+    CGFloat x1 = MIN(_initialTouches[0].normalizedPosition.x, _initialTouches[1].normalizedPosition.x);
+    CGFloat x2 = MIN(_currentTouches[0].normalizedPosition.x, _currentTouches[1].normalizedPosition.x);
+    CGFloat y1 = MIN(_initialTouches[0].normalizedPosition.y, _initialTouches[1].normalizedPosition.y);
+    CGFloat y2 = MIN(_currentTouches[0].normalizedPosition.y, _currentTouches[1].normalizedPosition.y);
+
+    NSSize deviceSize = _initialTouches[0].deviceSize;
+    NSPoint delta;
+    delta.x = (x2 - x1) * deviceSize.width;
+    delta.y = (y2 - y1) * deviceSize.height;
+    return delta;
+}
+
+- (NSSize)deltaSize {
+    if (!(_initialTouches[0] && _initialTouches[1] && _currentTouches[0] && _currentTouches[1])) return NSZeroSize;
+
+    CGFloat x1,x2,y1,y2,width1,width2,height1,height2;
+
+    x1 = MIN(_initialTouches[0].normalizedPosition.x, _initialTouches[1].normalizedPosition.x);
+    x2 = MAX(_initialTouches[0].normalizedPosition.x, _initialTouches[1].normalizedPosition.x);
+    width1 = x2 - x1;
+
+    y1 = MIN(_initialTouches[0].normalizedPosition.y, _initialTouches[1].normalizedPosition.y);
+    y2 = MAX(_initialTouches[0].normalizedPosition.y, _initialTouches[1].normalizedPosition.y);
+    height1 = y2 - y1;
+
+    x1 = MIN(_currentTouches[0].normalizedPosition.x, _currentTouches[1].normalizedPosition.x);
+    x2 = MAX(_currentTouches[0].normalizedPosition.x, _currentTouches[1].normalizedPosition.x);
+    width2 = x2 - x1;
+
+    y1 = MIN(_currentTouches[0].normalizedPosition.y, _currentTouches[1].normalizedPosition.y);
+    y2 = MAX(_currentTouches[0].normalizedPosition.y, _currentTouches[1].normalizedPosition.y);
+    height2 = y2 - y1;
+
+    NSSize deviceSize = _initialTouches[0].deviceSize;
+    NSSize delta;
+    delta.width = (width2 - width1) * deviceSize.width;
+    delta.height = (height2 - height1) * deviceSize.height;
+    return delta;
+}
+
+- (void)releaseTouches {
+    _initialTouches[0] = nil;
+    _initialTouches[1] = nil;
+    _currentTouches[0] = nil;
+    _currentTouches[1] = nil;
+
+    _initialTouches[0] = nil;
+    _initialTouches[1] = nil;
+    _currentTouches[0] = nil;
+    _currentTouches[1] = nil;
+}
+
+- (void)duelTouchBegin
+{
+    _initialFrame = _cropCoreView.frame;
+}
+
+- (void)duelTouchMoved
+{
+    CGPoint deltaOrigin = NSMakePoint(self.deltaOrigin.x / self.frame.size.width, self.deltaOrigin.y / self.frame.size.height);
+    deltaOrigin = NSMakePoint(deltaOrigin.x * _cropCoreView.frame.size.width, deltaOrigin.y * _cropCoreView.frame.size.height);
+
+    CGSize deltaSize = NSMakeSize(self.deltaSize.width / self.frame.size.width, self.deltaSize.height / self.frame.size.height);
+    deltaSize = NSMakeSize(2 * deltaSize.width * _cropCoreView.frame.size.width, 2 * deltaSize.height * _cropCoreView.frame.size.height);
+
+//    NSRect oldFrame = _initialFrame;
+//    _cropCoreView.frame = NSMakeRect(oldFrame.origin.x + deltaOrigin.x - deltaSize.width * 0.5,
+//                                     oldFrame.origin.y + deltaOrigin.y - deltaSize.height * 0.5,
+//                                     oldFrame.size.width + deltaSize.width,
+//                                     oldFrame.size.height + deltaSize.height);
+}
+
 
 @end
 

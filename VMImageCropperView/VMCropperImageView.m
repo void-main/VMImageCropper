@@ -327,30 +327,57 @@
                     width = fmaxf(deltaX, kCropWindowMinSize);
                     height = fmaxf(deltaY, kCropWindowMinSize);
 
-                    float curAspectRatio = width / height;
-                    if (curAspectRatio >= aspectRatio) {
-                        height = width / aspectRatio;
-                    } else {
-                        width = height * aspectRatio;
+                    if (aspectRatio > 0) {
+                        float curAspectRatio = width / height;
+                        if (curAspectRatio >= aspectRatio) {
+                            height = width / aspectRatio;
+                        } else {
+                            width = height * aspectRatio;
+                        }
                     }
 
                     if (x + width > _actualRect.origin.x + _actualRect.size.width) {
                         width = _actualRect.origin.x + _actualRect.size.width - x;
+
+                        if (aspectRatio > 0) {
+                            height = width / aspectRatio;
+                        }
                     }
                     if (y + height > _actualRect.origin.y + _actualRect.size.height) {
                         height = _actualRect.origin.y + _actualRect.size.height - y;
+
+                        if (aspectRatio > 0) {
+                            width = height * aspectRatio;
+                        }
                     }
                 } else {
                     width = fmaxf(deltaX, kCropWindowMinSize);
                     height = fmaxf(-deltaY, kCropWindowMinSize);
+
+                    if (aspectRatio > 0) {
+                        float curAspectRatio = width / height;
+                        if (curAspectRatio >= aspectRatio) {
+                            height = width / aspectRatio;
+                        } else {
+                            width = height * aspectRatio;
+                        }
+                    }
+
                     x = newOrigin.x;
                     y = newOrigin.y - height;
 
                     if (x + width > _actualRect.origin.x + _actualRect.size.width) {
                         width = _actualRect.origin.x + _actualRect.size.width - x;
+                        if (aspectRatio > 0) {
+                            height = width / aspectRatio;
+                            y = newOrigin.y - height;
+                        }
                     }
                     if (y < _actualRect.origin.y) {
                         height += (y - _actualRect.origin.y);
+                        if (aspectRatio > 0) {
+                            width = height * aspectRatio;
+                        }
                         y = _actualRect.origin.y;
                     }
                 }
@@ -358,29 +385,69 @@
                 if (deltaY >= 0) {
                     width = fmaxf(-deltaX, kCropWindowMinSize);
                     height = fmaxf(deltaY, kCropWindowMinSize);
+
+                    if (aspectRatio > 0) {
+                        float curAspectRatio = width / height;
+                        if (curAspectRatio >= aspectRatio) {
+                            height = width / aspectRatio;
+                        } else {
+                            width = height * aspectRatio;
+                        }
+                    }
+
                     x = newOrigin.x - width;
                     y = newOrigin.y;
 
-                    if (x < _actualRect.origin.x) {
-                        width += (x - _actualRect.origin.x);
-                        x = _actualRect.origin.x;
-                    }
                     if (y + height > _actualRect.origin.y + _actualRect.size.height) {
                         height = _actualRect.origin.y + _actualRect.size.height - y;
+
+                        if (aspectRatio > 0) {
+                            width = height * aspectRatio;
+                            x = newOrigin.x - width;
+                        }
+                    }
+                    if (x < _actualRect.origin.x) {
+                        width += (x - _actualRect.origin.x);
+
+                        if (aspectRatio > 0) {
+                            height = width / aspectRatio;
+                        }
+
+                        x = _actualRect.origin.x;
                     }
                 } else {
                     width = fmaxf(-deltaX, kCropWindowMinSize);
                     height = fmaxf(-deltaY, kCropWindowMinSize);
+
+                    if (aspectRatio > 0) {
+                        float curAspectRatio = width / height;
+                        if (curAspectRatio >= aspectRatio) {
+                            height = width / aspectRatio;
+                        } else {
+                            width = height * aspectRatio;
+                        }
+                    }
+
                     x = newOrigin.x - width;
                     y = newOrigin.y - height;
 
                     if (x < _actualRect.origin.x) {
                         width += (x - _actualRect.origin.x);
                         x = _actualRect.origin.x;
+
+                        if (aspectRatio > 0) {
+                            height = width / aspectRatio;
+                            y = newOrigin.y - height;
+                        }
                     }
                     if (y < _actualRect.origin.y) {
                         height += (y - _actualRect.origin.y);
                         y = _actualRect.origin.y;
+
+                        if (aspectRatio > 0) {
+                            width = height * aspectRatio;
+                            x = newOrigin.x - width;
+                        }
                     }
                 }
             }
@@ -407,34 +474,156 @@
         case Left: {
             x += deltaX;
             width -= deltaX;
+            float heightDiff = 0;
 
             if (width > 0) {
+                if (aspectRatio > 0) {
+                    heightDiff = width / aspectRatio - height;
+                    height = width / aspectRatio;
+                    y -= heightDiff * 0.5;
+                }
+
                 if (x < _actualRect.origin.x) {
                     width += (x - _actualRect.origin.x);
+                    if (aspectRatio > 0) {
+                        heightDiff = width / aspectRatio - height;
+                        height = width / aspectRatio;
+                        y -= heightDiff * 0.5;
+                    }
                     x = _actualRect.origin.x;
+                }
+
+                if (y < _actualRect.origin.y) {
+                    if (aspectRatio > 0) {
+                        float diff = _actualRect.origin.y - y;
+                        y = _actualRect.origin.y;
+                        height -= 2 * diff;
+                        width -= 2 * diff / aspectRatio;
+                        x += 2 * diff;
+                    }
+                }
+                if (y + height > _actualRect.origin.y + _actualRect.size.height) {
+                    if (aspectRatio > 0) {
+                        float diff = y - (_actualRect.origin.y + _actualRect.size.height - height);
+                        height -= 2 * diff;
+                        width -= 2 * diff / aspectRatio;
+                        x += 2 *diff;
+                        y = _actualRect.origin.y + _actualRect.size.height - height;
+                    }
                 }
             } else {
                 x += width;
                 width = -width;
+
+                if (aspectRatio > 0) {
+                    heightDiff = width / aspectRatio - height;
+                    height = width / aspectRatio;
+                    y -= heightDiff * 0.5;
+                }
+
                 if (x + width > _actualRect.origin.x + _actualRect.size.width) {
                     width = _actualRect.origin.x + _actualRect.size.width - x;
+
+                    if (aspectRatio > 0) {
+                        heightDiff = width / aspectRatio - height;
+                        height = width / aspectRatio;
+                        y -= heightDiff * 0.5;
+                    }
+                }
+
+                if (y < _actualRect.origin.y) {
+                    if (aspectRatio > 0) {
+                        float diff = _actualRect.origin.y - y;
+                        y = _actualRect.origin.y;
+                        height -= 2 * diff;
+                        width -= 2 * diff / aspectRatio;
+                    }
+                }
+                if (y + height > _actualRect.origin.y + _actualRect.size.height) {
+                    if (aspectRatio > 0) {
+                        float diff = y - (_actualRect.origin.y + _actualRect.size.height - height);
+                        height -= 2 * diff;
+                        width -= 2 * diff / aspectRatio;
+                        y = _actualRect.origin.y + _actualRect.size.height - height;
+                    }
                 }
             }
             break;
         }
         case Right: {
             width += deltaX;
+            float heightDiff = 0;
 
             if (width > 0) {
+                if (aspectRatio > 0) {
+                    heightDiff = width / aspectRatio - height;
+                    height = width / aspectRatio;
+                    y -= heightDiff * 0.5;
+                }
+
                 if (x + width > _actualRect.origin.x + _actualRect.size.width) {
                     width = _actualRect.origin.x + _actualRect.size.width - x;
+
+                    if (aspectRatio > 0) {
+                        heightDiff = width / aspectRatio - height;
+                        height = width / aspectRatio;
+                        y -= heightDiff * 0.5;
+                    }
+                }
+
+                if (y < _actualRect.origin.y) {
+                    if (aspectRatio > 0) {
+                        float diff = _actualRect.origin.y - y;
+                        y = _actualRect.origin.y;
+                        height -= 2 * diff;
+                        width -= 2 * diff / aspectRatio;
+                    }
+                }
+                if (y + height > _actualRect.origin.y + _actualRect.size.height) {
+                    if (aspectRatio > 0) {
+                        float diff = y - (_actualRect.origin.y + _actualRect.size.height - height);
+                        height -= 2 * diff;
+                        width -= 2 * diff / aspectRatio;
+                        y = _actualRect.origin.y + _actualRect.size.height - height;
+                    }
                 }
             } else {
                 x += width;
                 width = -width;
+
+                if (aspectRatio > 0) {
+                    heightDiff = width / aspectRatio - height;
+                    height = width / aspectRatio;
+                    y -= heightDiff * 0.5;
+                }
+
                 if (x < _actualRect.origin.x) {
                     width += (x - _actualRect.origin.x);
+                    if (aspectRatio > 0) {
+                        heightDiff = width / aspectRatio - height;
+                        height = width / aspectRatio;
+                        y -= heightDiff * 0.5;
+                    }
                     x = _actualRect.origin.x;
+                }
+
+                if (y < _actualRect.origin.y) {
+                    if (aspectRatio > 0) {
+                        float diff = _actualRect.origin.y - y;
+                        y = _actualRect.origin.y;
+                        height -= 2 * diff;
+                        width -= 2 * diff / aspectRatio;
+                        x += 2 * diff;
+                    }
+                }
+                if (y + height > _actualRect.origin.y + _actualRect.size.height) {
+                    if (aspectRatio > 0) {
+                        float diff = y - (_actualRect.origin.y + _actualRect.size.height - height);
+                        height -= 2 * diff;
+                        width -= 2 * diff / aspectRatio;
+                        x += 2 *diff;
+                        y = _actualRect.origin.y + _actualRect.size.height - height;
+                    }
                 }
             }
             break;
@@ -444,6 +633,10 @@
             height -= deltaY;
 
             if (height > 0) {
+                if (aspectRatio > 0) {
+                    width = height * aspectRatio;
+                }
+
                 if (y < _actualRect.origin.y) {
                     height += (y - _actualRect.origin.y);
                     y = _actualRect.origin.y;

@@ -631,38 +631,159 @@
         case Bottom: {
             y += deltaY;
             height -= deltaY;
+            float widthDiff = 0;
 
             if (height > 0) {
                 if (aspectRatio > 0) {
+                    widthDiff = height * aspectRatio - width;
                     width = height * aspectRatio;
+                    x -= widthDiff * 0.5;
                 }
 
                 if (y < _actualRect.origin.y) {
                     height += (y - _actualRect.origin.y);
+
+                    if (aspectRatio > 0) {
+                        widthDiff = height * aspectRatio - width;
+                        width = height * aspectRatio;
+                        x -= widthDiff * 0.5;
+                    }
+
                     y = _actualRect.origin.y;
+                }
+
+                if (x < _actualRect.origin.x) {
+                    if (aspectRatio > 0) {
+                        float diff = _actualRect.origin.x - x;
+                        x = _actualRect.origin.x;
+                        width -= 2 * diff;
+                        height -= 2 * diff * aspectRatio;
+                        y += 2 * diff;
+                    }
+                }
+                if (x + width > _actualRect.origin.x + _actualRect.size.width) {
+                    if (aspectRatio > 0) {
+                        float diff = x - (_actualRect.origin.x + _actualRect.size.width - width);
+                        width -= 2 * diff;
+                        height -= 2 * diff * aspectRatio;
+                        y += 2 *diff;
+                        x = _actualRect.origin.x + _actualRect.size.width - width;
+                    }
                 }
             } else {
                 y += height;
                 height = -height;
+
+                if (aspectRatio > 0) {
+                    widthDiff = height * aspectRatio - width;
+                    width = height * aspectRatio;
+                    x -= widthDiff * 0.5;
+                }
+
                 if (y + height > _actualRect.origin.y + _actualRect.size.height) {
                     height = _actualRect.origin.y + _actualRect.size.height - y;
+
+                    if (aspectRatio > 0) {
+                        widthDiff = height * aspectRatio - width;
+                        width = height * aspectRatio;
+                        x -= widthDiff * 0.5;
+                    }
+                }
+
+                if (x < _actualRect.origin.x) {
+                    if (aspectRatio > 0) {
+                        float diff = _actualRect.origin.x - x;
+                        x = _actualRect.origin.x;
+                        width -= 2 * diff;
+                        height -= 2 * diff * aspectRatio;
+                    }
+                }
+                if (x + width > _actualRect.origin.x + _actualRect.size.width) {
+                    if (aspectRatio > 0) {
+                        float diff = x - (_actualRect.origin.x + _actualRect.size.width - width);
+                        width -= 2 * diff;
+                        height -= 2 * diff * aspectRatio;
+                        x = _actualRect.origin.x + _actualRect.size.width - width;
+                    }
                 }
             }
             break;
         }
         case Top: {
             height += deltaY;
+            float widthDiff = 0;
 
             if (height > 0) {
+                if (aspectRatio > 0) {
+                    widthDiff = height * aspectRatio - width;
+                    width = height * aspectRatio;
+                    x -= widthDiff * 0.5;
+                }
+
                 if (y + height > _actualRect.origin.y + _actualRect.size.height) {
                     height = _actualRect.origin.y + _actualRect.size.height - y;
+
+                    if (aspectRatio > 0) {
+                        widthDiff = height * aspectRatio - width;
+                        width = height * aspectRatio;
+                        x -= widthDiff * 0.5;
+                    }
+                }
+
+                if (x < _actualRect.origin.x) {
+                    if (aspectRatio > 0) {
+                        float diff = _actualRect.origin.x - x;
+                        x = _actualRect.origin.x;
+                        width -= 2 * diff;
+                        height -= 2 * diff * aspectRatio;
+                    }
+                }
+                if (x + width > _actualRect.origin.x + _actualRect.size.width) {
+                    if (aspectRatio > 0) {
+                        float diff = x - (_actualRect.origin.x + _actualRect.size.width - width);
+                        width -= 2 * diff;
+                        height -= 2 * diff * aspectRatio;
+                        x = _actualRect.origin.x + _actualRect.size.width - width;
+                    }
                 }
             } else {
                 y += height;
                 height = -height;
+                if (aspectRatio > 0) {
+                    widthDiff = height * aspectRatio - width;
+                    width = height * aspectRatio;
+                    x -= widthDiff * 0.5;
+                }
+
                 if (y < _actualRect.origin.y) {
                     height += (y - _actualRect.origin.y);
+
+                    if (aspectRatio > 0) {
+                        widthDiff = height * aspectRatio - width;
+                        width = height * aspectRatio;
+                        x -= widthDiff * 0.5;
+                    }
+
                     y = _actualRect.origin.y;
+                }
+
+                if (x < _actualRect.origin.x) {
+                    if (aspectRatio > 0) {
+                        float diff = _actualRect.origin.x - x;
+                        x = _actualRect.origin.x;
+                        width -= 2 * diff;
+                        height -= 2 * diff * aspectRatio;
+                        y += 2 * diff;
+                    }
+                }
+                if (x + width > _actualRect.origin.x + _actualRect.size.width) {
+                    if (aspectRatio > 0) {
+                        float diff = x - (_actualRect.origin.x + _actualRect.size.width - width);
+                        width -= 2 * diff;
+                        height -= 2 * diff * aspectRatio;
+                        y += 2 *diff;
+                        x = _actualRect.origin.x + _actualRect.size.width - width;
+                    }
                 }
             }
             break;

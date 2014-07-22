@@ -296,6 +296,8 @@
     _startFrame = _cropCoreView.frame;
 
     _cropCoreView.viewStatus = Dragging;
+
+    [self.window disableCursorRects];
 }
 
 - (void)mouseDragged:(NSEvent *)theEvent
@@ -823,6 +825,9 @@
 {
     _cropCoreView.viewStatus = Normal;
     [[NSCursor arrowCursor] set];
+
+    [self.window enableCursorRects];
+    [self.window resetCursorRects];
 }
 
 @end
